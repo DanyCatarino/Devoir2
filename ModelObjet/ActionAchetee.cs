@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ModelObjet
 {
-    class ActionAchetee
+    public class ActionAchetee
     {
-
+        
     }
 }

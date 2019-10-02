@@ -2,7 +2,7 @@
 
 namespace ModelObjet
 {
-    public class Class1
+    public class ActionReelle
     {
 
     }
