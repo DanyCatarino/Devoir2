@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ModelObjet;
+using Windows.UI.Popups;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -24,7 +25,6 @@ namespace DevoirTrader
     public sealed partial class MainPage : Page
     {
         Dictionary<string, List<ActionAchetee>> dico;
-        List<string> lesGenres;
         List<ActionReelle> lesActionsReelles;
         public MainPage()
         {
@@ -34,6 +34,7 @@ namespace DevoirTrader
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             dico = new Dictionary<string, List<ActionAchetee>>();
+            lesActionsReelles = new List<ActionReelle>();
 
             #region jeu d'essais pour la liste de toutes les actions réelles
             lesActionsReelles.Add
@@ -234,7 +235,68 @@ namespace DevoirTrader
             );
             #endregion
 
+            lvTraders.ItemsSource = dico.Keys;
 
+            lvAchat.ItemsSource = lesActionsReelles;
+        }
+
+        private void LvTraders_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lvTraders.SelectedItem != null)
+            {
+                lvActions.ItemsSource = null;
+                lvActions.ItemsSource = dico[lvTraders.SelectedItem.ToString()];
+            }
+
+            double mtPortefeuille = 0;
+            foreach (ActionAchetee montant in dico[lvTraders.SelectedItem.ToString()])
+            {
+                mtPortefeuille += montant.PrixAchat * montant.Quantite;
+            }
+            txtMontantPortefeuille.Text = mtPortefeuille.ToString();
+
+        }
+
+        private void LvActions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            txtNomAction.Text = (lvActions.SelectedItem as ActionAchetee).NomAction;
+            txtValeurAction.Text = (lvActions.SelectedItem as ActionAchetee).ValeurAction.ToString();
+            txtPA.Text = (lvActions.SelectedItem as ActionAchetee).PrixAchat.ToString();
+            txtQttAchetee.Text = (lvActions.SelectedItem as ActionAchetee).NomAction.ToString();
+        }
+
+        private void BtnVendre_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void BtnAchat_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvAchat.SelectedItem == null)
+            {
+                var dialog = new MessageDialog("Sélectionner une action");
+                await dialog.ShowAsync();
+            }
+            else
+            {
+                if (txtPrixAchat.Text == "")
+                {
+                    var dialog = new MessageDialog("Saisissez le prix d'achat");
+                    await dialog.ShowAsync();
+                }
+                else
+                {
+                    if (txtQuantite.Text == "")
+                    {
+                        var dialog = new MessageDialog("Saisissez la quantite");
+                        await dialog.ShowAsync();
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
         }
     }
 }
