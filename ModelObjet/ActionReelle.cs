@@ -6,6 +6,6 @@ namespace ModelObjet
     {
         public string CodeAction { get; set; }
         public string NomAction { get; set; }
-        public double doubleAction { get; set; }
+        public double ValeurAction { get; set; }
     }
 }
